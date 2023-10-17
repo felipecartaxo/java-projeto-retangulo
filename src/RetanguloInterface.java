@@ -6,7 +6,6 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import javax.swing.JTextArea;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Toolkit;
@@ -31,10 +30,10 @@ public class RetanguloInterface {
 	private JButton button;
 	private JLabel labelFator;
 	private JTextField textFieldFator;
-
+	private JButton buttonCalcularArea;
+	
 	// Tem visibilidade global e pode ser utilizado em qualquer lugar da aplicação
 	private Retangulo r;
-	private JButton buttonCalcularArea;
 
 	/**
 	 * Launch the application.
@@ -106,22 +105,28 @@ public class RetanguloInterface {
 		frame.getContentPane().add(textFieldComprimento);
 		textFieldComprimento.setColumns(10);
 		
-		
 		// Cria um retângulo
 		buttonCriarRetangulo = new JButton("Criar retângulo");
 		buttonCriarRetangulo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		buttonCriarRetangulo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (textFieldId.getText().isEmpty() || textFieldLargura.getText().isEmpty() || textFieldComprimento.getText().isEmpty()) {
-					log.setText("Campo vazio.");
-					return;
+				try {
+					if(textFieldId.getText().isEmpty() || textFieldLargura.getText().isEmpty() || textFieldComprimento.getText().isEmpty()) {
+						log.setText("Campo vazio.");
+					}
+					else {
+						int id = Integer.parseInt(textFieldId.getText());
+						double largura = Double.parseDouble(textFieldLargura.getText());
+						double comprimento = Double.parseDouble(textFieldComprimento.getText());
+						
+						r = new Retangulo(id, largura, comprimento);
+						
+						log.setText("Retângulo criado com sucesso.");
+					}
 				}
-				int id = Integer.parseInt(textFieldId.getText());
-				double largura = Double.parseDouble(textFieldLargura.getText());
-				double comprimento = Double.parseDouble(textFieldComprimento.getText());
-				
-				r = new Retangulo(id, largura, comprimento);
-				log.setText("Retângulo criado com sucesso.");
+				catch (Exception ex) {
+					log.setText(ex.getMessage());
+				}
 			}
 		});
 		buttonCriarRetangulo.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
@@ -133,11 +138,16 @@ public class RetanguloInterface {
 		buttonLimparCampos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		buttonLimparCampos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textFieldId.setText("");
-				textFieldLargura.setText("");
-				textFieldComprimento.setText("");
-				
-				log.setText("Campos limpos.");
+				try {
+					textFieldId.setText("");
+					textFieldLargura.setText("");
+					textFieldComprimento.setText("");
+					
+					log.setText("Campos limpos.");
+				}
+				catch (Exception ex) {
+					log.setText(ex.getMessage());
+				}
 			}
 		});
 		buttonLimparCampos.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
@@ -160,7 +170,7 @@ public class RetanguloInterface {
 		buttonCalcularArea.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(r == null) {
-					log.setText("Crie um retângulo antes!");
+					log.setText("Crie um retângulo!");
 				}
 				else {
 					log.setText("Área = " + r.calcularArea());
@@ -171,30 +181,31 @@ public class RetanguloInterface {
 		buttonCalcularArea.setBounds(10, 206, 120, 23);
 		frame.getContentPane().add(buttonCalcularArea);
 		
+		// Exibe as medidas do retângulo
 		buttonExibir = new JButton("Exibir medidas");
 		buttonExibir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		buttonExibir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(r == null) {
-					log.setText("Crie um retângulo antes!");
+					log.setText("Crie um retângulo!");
 				}
 				else {
-					log.setText(r.toString());
+					log.setText(r.toString());	
 				}
 			}
 		});
 		
-		// Exibe as medidas do retângulo
 		buttonExibir.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		buttonExibir.setBounds(10, 240, 120, 23);
 		frame.getContentPane().add(buttonExibir);
 		
+		// Transforma o retângulo em um quadrado
 		buttonEnquadrar = new JButton("Enquadrar");
 		buttonEnquadrar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		buttonEnquadrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (r == null) {
-					log.setText("Crie um retângulo antes!");
+				if(r == null) {
+					log.setText("Crie um retângulo!");
 				}
 				else {
 					r.enquadrar();
@@ -203,7 +214,6 @@ public class RetanguloInterface {
 			}
 		});
 		
-		// Transforma o retângulo em um quadrado
 		buttonEnquadrar.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		buttonEnquadrar.setBounds(10, 274, 120, 23);
 		frame.getContentPane().add(buttonEnquadrar);
@@ -213,13 +223,19 @@ public class RetanguloInterface {
 		button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(r == null) {
-					log.setText("Crie um retângulo antes!");
+				if(textFieldFator.getText().isEmpty()) {
+					log.setText("Campo vazio.");
 				}
 				else {
 					double fator = Double.parseDouble(textFieldFator.getText());
-					r.redimensionar(fator);
-					log.setText("O retângulo foi redimensionado pelo fator " + fator);
+					
+					if(r == null) {
+						log.setText("Crie um retângulo.");
+					}
+					else {
+						r.redimensionar(fator);
+						log.setText("O retângulo foi redimensionado pelo fator " + fator);
+					}
 				}
 			}
 		});

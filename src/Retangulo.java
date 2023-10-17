@@ -5,16 +5,31 @@ class Retangulo {
 	private double comprimento;
 	
 	// Construtor vazio
-	public Retangulo() { }
+//	public Retangulo() { }
 	
 	// Construtor contendo apenas um parâmetro (nesse caso seria criado um quadrado)
-	public Retangulo(double valor) {
-		this.largura = valor;
-		this.comprimento = valor;
-	}
+//	public Retangulo(double valor) throws Exception {
+//		if(valor == 0) {
+//			throw new Exception("Valor informado igual a zero. Insira um valor válido.");
+//		}
+//		if(valor < 0) {
+//			throw new Exception("Valor negativo. Insira um valor válido.");
+//		}
+//		
+//		this.id = 1;
+//		this.largura = valor;
+//		this.comprimento = valor;
+//	}
 	
 	// Construtor contendo 3 parâmetros
-	public Retangulo(int id, double largura, double comprimento) {
+	public Retangulo(int id, double largura, double comprimento) throws Exception {
+		if(id == 0 || largura == 0 || comprimento == 0) {
+			throw new Exception("Valor informado igual a zero. Insira um valor válido.");
+		}
+		if(id < 0 || largura < 0 || comprimento < 0) {
+			throw new Exception("Valor negativo. Insira um valor válido.");
+		}
+		
 		this.id = id;
 		this.largura = largura;
 		this.comprimento = comprimento;
@@ -25,7 +40,7 @@ class Retangulo {
 	}
 	
 	// Altera as medidas do retângulo para que o mesmo se transforme em um quadrado
-	public void enquadrar() { 
+	public void enquadrar() {
 		double media = (this.largura + this.comprimento) / 2;
 		this.largura = media;
 		this.comprimento = media;
@@ -42,7 +57,7 @@ class Retangulo {
 	}
 	
 	// Verifica se as medidas entre dois retângulos são iguais
-	public boolean ehIgual(Retangulo outroRetangulo) {
+	public boolean ehIgual(Retangulo outroRetangulo) throws Exception {
 		if(this.calcularArea() == outroRetangulo.calcularArea()) {
 			return true;
 		}
@@ -62,7 +77,7 @@ class Retangulo {
 		this.largura = outroRetangulo.largura;
 		this.comprimento = outroRetangulo.comprimento;
 	}
-
+		
 	// Getters e Setters
 	public int getId() {
 		return id;
